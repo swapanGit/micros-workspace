@@ -1,0 +1,37 @@
+# @Value
+#1 my.greeting=Hello Greeting
+
+# java -jar app-name.jar //jar will call "my.greeting" msg from _application.properties inside jar
+# cd target location and create _application.properties file
+# java -jar app-name.jar //jar will call "my.greeting" msg from _application.properties outside jar
+# java -jar app-name.jar --my.greeting="Hello Greeting" //jar will call "my.greeting" msg from cmd line
+
+app:
+  name: config-server
+
+my:
+  greeting: Hello Greeting  ${app.name}
+  list:
+    value: one,two,three
+  db:
+    values: "{url:'http://localhost:something', userName:'myname', password:'mypass'}"
+
+# @ConfigurationProperties
+db:
+  connection: http://localhost-default
+  host: 127.0.0.1
+  port: 1988
+
+management.endpoints.web.exposure.include: "*"
+# http://localhost:8080/actuator/configprops
+
+# @Profile
+#spring.profiles.active: test
+# java -jar app-name.jar --spring.profiles.active=test
+
+spring.cloud.config.server.git.uri: http://localhost:8888
+
+spring.application.name: config-server
+
+# http://localhost:8080/actuator/refresh
+#send the mentioned post request,so that we you update the config repo,then changes reflect without restarting server.
