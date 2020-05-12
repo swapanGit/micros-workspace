@@ -1,0 +1,59 @@
+version: '3'
+services:
+  eureka-discovery-server:
+    build: 
+      context: eureka-discovery-server
+      dockerfile: Dockerfile
+    image: eureka-discovery-server:1.1
+    hostname: eureka-discovery-server
+    networks: 
+      - ex-nwt
+    ports:
+      - 8761:8761
+  movie-catalog:
+    build: 
+      context: movie-catalog
+      dockerfile: Dockerfile
+    image: movie-catalog:1.1
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://eureka-discovery-server:8761/eureka
+    restart: on-failure
+    depends_on:
+      - eureka-discovery-server
+    networks: 
+      - ex-nwt
+    ports:
+      - 8801:8801
+  movie-info:
+    build: 
+      context: movie-info
+      dockerfile: Dockerfile
+    image: movie-info:1.1
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://eureka-discovery-server:8761/eureka
+    restart: on-failure
+    depends_on:
+      - eureka-discovery-server
+    networks: 
+      - ex-nwt
+    ports:
+      - 8802:8802
+  rating-data:
+    build: 
+      context: rating-data
+      dockerfile: Dockerfile
+    image: rating-data:1.1
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://eureka-discovery-server:8761/eureka
+    restart: on-failure
+    depends_on:
+      - eureka-discovery-server
+    networks: 
+      - ex-nwt
+    ports:
+      - 8803:8803
+networks: 
+   ex-nwt:
